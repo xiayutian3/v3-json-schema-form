@@ -14,6 +14,9 @@ export default defineComponent({
   components: {
     HelloWorld
   },
+  mounted () {
+    console.log(this.name, '--------')
+  },
   setup (props, { slots, attrs, emit }) {
     const state = reactive({
       name: 'heelo'
