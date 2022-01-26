@@ -7880,7 +7880,7 @@ monaco-editor-webpack-plugin@^7.0.1:
   dependencies:
     loader-utils "^2.0.2"
 
-monaco-editor@0.28.1:
+monaco-editor@^0.28.1:
   version "0.28.1"
   resolved "https://registry.npmmirror.com/monaco-editor/download/monaco-editor-0.28.1.tgz#732788ff2172d59e6d436b206da8cac715413940"
   integrity sha1-cyeI/yFy1Z5tQ2sgbajKxxVBOUA=
@@ -11190,7 +11190,7 @@ vue-jest@^5.0.0-0:
     source-map "0.5.6"
     tsconfig "^7.0.0"
 
-vue-jss@^0.0.4:
+vue-jss@0.0.4:
   version "0.0.4"
   resolved "https://registry.npmmirror.com/vue-jss/download/vue-jss-0.0.4.tgz#0f392ed9cb6cc727005ed21892bd839287093993"
   integrity sha1-Dzku2ctsxycAXtIYkr2DkocJOZM=
