@@ -1,5 +1,5 @@
 import type { PropType, DefineComponent } from 'vue'
-import type { ErrorSchema } from './validator'
+// import type { ErrorSchema } from './validator'
 
 import type { FormatDefinition } from 'ajv'
 
@@ -73,11 +73,11 @@ export const FiledPropsDefine = {
   uiSchema: {
     type: Object as PropType<UISchema>,
     required: true
-  },
-  errorSchema: {
-    type: Object as PropType<ErrorSchema>,
-    required: true
   }
+  // errorSchema: {
+  //   type: Object as PropType<ErrorSchema>,
+  //   required: true
+  // }
 } as const
 
 export type CommonFieldType = DefineComponent<typeof FiledPropsDefine>

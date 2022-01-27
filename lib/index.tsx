@@ -1,13 +1,4 @@
 
-import { defineComponent } from 'vue'
+import SchemaForm from './SchemaForm'
 
-// jsx的形式写组件
-export default defineComponent({
-  setup () { // 典型的闭包
-    return () => {
-      return (
-        <div>this is form</div>
-      )
-    }
-  }
-})
+export default SchemaForm
