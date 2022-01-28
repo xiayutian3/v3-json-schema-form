@@ -106,6 +106,8 @@ export default defineComponent({
     const classesRef = useStyles()
 
     const handleChange = (v: any) => {
+      // console.log('v', typeof v)
+
       demo.data = v
       demo.dataCode = toJson(v)
     }
@@ -131,7 +133,7 @@ export default defineComponent({
       const classes = classesRef.value
       const selected = selectedRef.value
 
-      console.log(methodRef)
+      // console.log(methodRef)
 
       return (
         // <StyleThemeProvider>

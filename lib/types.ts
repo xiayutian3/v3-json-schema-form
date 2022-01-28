@@ -59,21 +59,21 @@ export const FiledPropsDefine = {
     type: Object as PropType<Schema>,
     required: true
   },
-  rootSchema: {
-    type: Object as PropType<Schema>,
-    required: true
-  },
+  // rootSchema: {
+  //   type: Object as PropType<Schema>,
+  //   required: true
+  // },
   value: {
     required: true
   },
   onChange: {
     type: Function as PropType<(v: any) => void>,
     required: true
-  },
-  uiSchema: {
-    type: Object as PropType<UISchema>,
-    required: true
   }
+  // uiSchema: {
+  //   type: Object as PropType<UISchema>,
+  //   required: true
+  // }
   // errorSchema: {
   //   type: Object as PropType<ErrorSchema>,
   //   required: true
