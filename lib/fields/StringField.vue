@@ -9,7 +9,8 @@ import { FiledPropsDefine } from '../types'
 // eslint-disable-next-line no-undef
 const props = defineProps(FiledPropsDefine)
 const handleChange = (e:any) => {
-  console.log(e)
+  // console.log(e)
+  // console.log('props', props)
   props.onChange(e.target.value)
 }
 </script>
