@@ -80,6 +80,16 @@ export const FiledPropsDefine = {
   // }
 } as const
 
+// // 声明SchemaItem组件的类型，FiledPropsDefine只是我们声明的对象， ExtractPropTypes帮助我们拿到props类型
+// // type SchemaItemDefine = DefineComponent< ExtractPropTypes<typeof FiledPropsDefine>> //也可以，默认vue里边会帮我们转化
+// export type SchemaItemDefine = DefineComponent< typeof FiledPropsDefine>
+
+// // 或者 这样定义组件的类型
+// // const TypeHelperComponent = defineComponent({
+// //   props: FiledPropsDefine
+// // })
+// // type SchemaItemDefine = typeof TypeHelperComponent
+
 export type CommonFieldType = DefineComponent<typeof FiledPropsDefine>
 
 export enum SelectionWidgetNames {
