@@ -59,7 +59,7 @@ export const FiledPropsDefine = {
     type: Object as PropType<Schema>,
     required: true
   },
-  rootSchema: {
+  rootSchema: { // utils 的retrieveSchema 需要rootschema去处理
     type: Object as PropType<Schema>,
     required: true
   },

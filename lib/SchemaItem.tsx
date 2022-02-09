@@ -4,6 +4,7 @@ import { computed, defineComponent, PropType } from 'vue'
 import StringField from './fields/StringField.vue'
 import NumberField from './fields/NumberField.vue'
 import ObjectField from './fields/ObjectField'
+import ArrayField from './fields/ArrayField'
 
 import { Schema, SchemaTypes, FiledPropsDefine } from './types'
 // 处理shcemaitem 节点
@@ -38,6 +39,10 @@ export default defineComponent({
         }
         case SchemaTypes.OBJECT: {
           Component = ObjectField
+          break
+        }
+        case SchemaTypes.ARRAY: {
+          Component = ArrayField
           break
         }
         default: {

@@ -15,7 +15,29 @@ export default {
       telephone: {
         type: 'string',
         minLength: 10
+      },
+      staticArray: {
+        // title: 'staticArray',
+        type: 'array',
+        items: [
+          {
+            // title: 'staticArray1',
+            type: 'string'
+          },
+          {
+            // title: 'staticArray2',
+            type: 'number'
+          }
+        ]
+      },
+      singleTypeArray: {
+        // title: 'singleTypeArray',
+        type: 'array',
+        items: {
+          type: 'string'
+        }
       }
+
     }
   },
   uiSchema: {
@@ -37,6 +59,7 @@ export default {
     lastName: 'Norris',
     age: 75,
     bio: 'Roundhouse kicking asses since 1940',
-    password: 'noneed'
+    password: 'noneed',
+    singleTypeArray: ['jokcy']
   }
 }
