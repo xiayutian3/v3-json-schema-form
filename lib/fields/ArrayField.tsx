@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { FiledPropsDefine, Schema } from '../types'
 import { useVJSFContext } from '../context'
 import { createUseStyles } from 'vue-jss'
+import SelectionWidget from '../widgets/Selection'
 
 // css in js 样式生成
 // 用 jss 调写样式
@@ -27,19 +28,46 @@ const useStyles = createUseStyles({
 // 可排序的单类型的多个节点（排序功能），包含 schema.item组件
 const ArrayItemWrapper = defineComponent({
   name: 'ArrayItemWrapper',
-  // props: {},
+  props: {
+    onAdd: {
+      type: Function as PropType<(index:number) =>void>,
+      required: true
+    },
+    onDelete: {
+      type: Function as PropType<(index:number) =>void>,
+      required: true
+    },
+    onUp: {
+      type: Function as PropType<(index:number) =>void>,
+      required: true
+    },
+    onDown: {
+      type: Function as PropType<(index:number) =>void>,
+      required: true
+    },
+    index: {
+      type: Number,
+      required: true
+    }
+  },
   setup (props, { slots }) {
     const classesRef = useStyles()
+
+    // 添加函数
+    const handleAdd = () => props.onAdd(props.index)
+    const handleDelete = () => props.onDelete(props.index)
+    const handleUp = () => props.onUp(props.index)
+    const handleDown = () => props.onDown(props.index)
 
     return () => {
       const classes = classesRef.value
       return (
         <div class={classes.container}>
           <div class={classes.actions}>
-            <button class={classes.action}>新增</button>
-            <button class={classes.action}>删除</button>
-            <button class={classes.action}>上移</button>
-            <button class={classes.action}>下移</button>
+            <button class={classes.action} onClick={handleAdd}>新增</button>
+            <button class={classes.action} onClick={handleDelete}>删除</button>
+            <button class={classes.action} onClick={handleUp}>上移</button>
+            <button class={classes.action} onClick={handleDown}>下移</button>
           </div>
           {/* // vue3中的slots。default 是函数 */}
           <div class={classes.content}>{slots.default && slots.default()}</div>
@@ -84,6 +112,38 @@ export default defineComponent({
       props.onChange(arr)
     }
 
+    // 新增，等操作
+    const handleAdd = (index: number) => {
+      const { value } = props
+      const arr = Array.isArray(value) ? value : []
+      arr.splice(index + 1, 0, undefined)
+      props.onChange(arr)
+    }
+    const handleDelete = (index: number) => {
+      const { value } = props
+      const arr = Array.isArray(value) ? value : []
+      arr.splice(index, 1)
+      props.onChange(arr)
+    }
+
+    const handleUp = (index: number) => {
+      if (index === 0) return
+      const { value } = props
+      const arr = Array.isArray(value) ? value : []
+      const item = arr.splice(index, 1)
+      arr.splice(index - 1, 0, ...item)
+      props.onChange(arr)
+    }
+
+    const handleDown = (index: number) => {
+      const { value } = props
+      const arr = Array.isArray(value) ? value : []
+      if (index === arr.length - 1) return
+      const item = arr.splice(index, 1)
+      arr.splice(index + 1, 0, ...item)
+      props.onChange(arr)
+    }
+
     return () => {
       // 渲染 SchemaItem 节点
       const { schema, rootSchema, value } = props
@@ -93,7 +153,7 @@ export default defineComponent({
       // 单种情况
       const isSelect = schema.items && (schema.items as any).enum
 
-      // 数组渲染的情况
+      // 数组渲染的情况（第二种情况）
       if (isMultiType) {
         const items: Schema[] = schema.items as any
         const arr = Array.isArray(value) ? value : []
@@ -108,11 +168,12 @@ export default defineComponent({
             />
           )
         })
+        // 第一种情况
       } else if (!isSelect) {
         const arr = Array.isArray(value) ? value : []
         return arr.map((v: any, index: number) => {
           return (
-            <ArrayItemWrapper>
+            <ArrayItemWrapper index={index} onAdd={handleAdd} onDelete={handleDelete} onUp={handleUp} onDown={handleDown}>
               <SchemaItem
                 schema={schema.items as Schema}
                 rootSchema={rootSchema}
@@ -123,9 +184,17 @@ export default defineComponent({
             </ArrayItemWrapper>
           )
         })
+        // 第三种情况
+      } else {
+        const enumOptions = (schema as any).items.enum
+        const options = enumOptions.map((e:any) => ({
+          key: e,
+          value: e
+        }))
+        return <SelectionWidget onChange={props.onChange} value={props.value} options={options}/>
       }
 
-      return <div>hehe</div>
+      // return <div>hehe</div>
     }
   }
 })

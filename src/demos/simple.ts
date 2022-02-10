@@ -34,7 +34,26 @@ export default {
         // title: 'singleTypeArray',
         type: 'array',
         items: {
-          type: 'string'
+          // type: 'string'
+          type: 'object',
+          properties: {
+            name: {
+              // title: 'singleTypeArray1',
+              type: 'string'
+            },
+            age: {
+              // title: 'singleTypeArray2',
+              type: 'number'
+            }
+          }
+        }
+      },
+      multiSelectArray: {
+        // title: 'multiSelectArray',
+        type: 'array',
+        items: {
+          type: 'string',
+          enum: ['123', '456', '789']
         }
       }
 
@@ -60,6 +79,6 @@ export default {
     age: 75,
     bio: 'Roundhouse kicking asses since 1940',
     password: 'noneed',
-    singleTypeArray: ['jokcy']
+    singleTypeArray: [{ name: 'jokcy', age: 12 }]
   }
 }
