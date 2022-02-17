@@ -1,8 +1,8 @@
 import { computed, defineComponent, PropType } from 'vue'
-// import NumberField from './fields/NumberField'
-// import StringField from './fields/StringField'
-import StringField from './fields/StringField.vue'
-import NumberField from './fields/NumberField.vue'
+import NumberField from './fields/NumberField'
+import StringField from './fields/StringField'
+// import StringField from './fields/StringField.vue'
+// import NumberField from './fields/NumberField.vue'
 import ObjectField from './fields/ObjectField'
 import ArrayField from './fields/ArrayField'
 
@@ -23,6 +23,8 @@ export default defineComponent({
 
     return () => {
       const { schema } = props
+      // console.log('schema: ', schema)
+
       const retrievedSchema = retrievedSchemaRef.value
 
       // 如果用户没有制定type  我们可以帮用户去猜测type的值

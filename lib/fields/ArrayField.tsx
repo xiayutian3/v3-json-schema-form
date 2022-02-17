@@ -153,7 +153,7 @@ export default defineComponent({
       // 单种情况
       const isSelect = schema.items && (schema.items as any).enum
 
-      // 数组渲染的情况（第二种情况）
+      // 数组渲染的情况（第二种情况）simple-> staticArray
       if (isMultiType) {
         const items: Schema[] = schema.items as any
         const arr = Array.isArray(value) ? value : []
@@ -168,7 +168,7 @@ export default defineComponent({
             />
           )
         })
-        // 第一种情况
+        // 第一种情况 //simple-> singleTypeArray
       } else if (!isSelect) {
         const arr = Array.isArray(value) ? value : []
         return arr.map((v: any, index: number) => {
@@ -184,7 +184,7 @@ export default defineComponent({
             </ArrayItemWrapper>
           )
         })
-        // 第三种情况
+        // 第三种情况 simple-> multiSelectArray
       } else {
         const enumOptions = (schema as any).items.enum
         const options = enumOptions.map((e:any) => ({

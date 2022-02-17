@@ -1,37 +1,22 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount, shallowMount } from '@vue/test-utils'
 import { defineComponent, h } from 'vue'
-// import HelloWorld from '@/components/HelloWorld.vue'
-const HelloWorld = defineComponent({
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  },
-  setup: (props) => {
-    return () => {
-      return h('div', props.msg)
-    }
-  }
-})
+import JsonSchemaForm, { NumberField } from '../../lib'
 
-// 测试套件
-describe('HelloWorld.vue', () => {
-  // 测试用例
-  it('renders props.msg when passed', () => {
-    const msg = 'new message'
-    const wrapper = shallowMount(HelloWorld, {
-      props: { msg }
+describe('JsonSchemaForm', () => {
+  it('should render correct number field', () => {
+    let value = ''
+    const wrapper = mount(JsonSchemaForm, {
+      props: {
+        schema: {
+          type: 'number'
+        },
+        value: value,
+        onChange: (v:any) => { value = v }
+      }
     })
-    // 断言
-    expect(wrapper.text()).toMatch(msg)
-    // // 断言    不符合的情况
-    // expect(wrapper.text()).not.toMatch(msg)
+
+    const numberFiled = wrapper.findComponent(NumberField)
+    // 断言 NumberField 确定会被渲染
+    expect(numberFiled.exists()).toBeTruthy()
   })
-})
-// 测试用例（这种情况用的不是很多）
-test('renders props.msg when passed', () => {
-  const msg = 'new message'
-  const wrapper = shallowMount(HelloWorld, {
-    props: { msg }
-  })
-  expect(wrapper.text()).toMatch(msg)
 })
