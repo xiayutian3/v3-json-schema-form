@@ -53,15 +53,16 @@ export default defineComponent({
     //   console.log(context.SchemaItem)
     // })
 
-    // 条件判断
-    if (!context) {
-      throw Error('SchemaItem should be used')
-    }
+    // // 条件判断  (useVJSFContext函数内部调用的时候已经做了判断了，这里就不需要了)
+    // if (!context) {
+    //   throw Error('SchemaItem should be used')
+    // }
 
     const handleObjectFieldChange = (key: string, v: any) => {
       // console.log('v: ', v, props.value)
       // console.log('key: ', key)
       const value: any = isObject(props.value) ? props.value : {}
+      // 这里可以新增或修改 key  value UI中可以查看
       if (v === undefined) {
         delete value[key]
       } else {

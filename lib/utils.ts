@@ -68,6 +68,7 @@ export function retrieveSchema (
     return {} as Schema
   }
   let resolvedSchema = resolveSchema(schema, rootSchema, formData)
+  // console.log('resolvedSchema: ', resolvedSchema)
 
   // TODO: allOf and additionalProperties not implemented
   if ('allOf' in schema) {
@@ -96,6 +97,7 @@ export function retrieveSchema (
       formData
     )
   }
+  // console.log('resolvedSchema', resolvedSchema)
   return resolvedSchema
 }
 
@@ -112,7 +114,6 @@ export function stubExistingAdditionalProperties (
     ...schema,
     properties: { ...schema.properties }
   }
-
   Object.keys(formData).forEach((key) => {
     if ((schema as any).properties.hasOwnProperty(key)) {
       // No need to stub, our schema already has the property

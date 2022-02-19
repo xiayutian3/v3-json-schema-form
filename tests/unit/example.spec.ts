@@ -23,7 +23,7 @@ describe('JsonSchemaForm', () => {
     // expect(value).toBe('123')
     // 如果是我们自己写的组件，我们要考虑它的一个实现过程，怎么触发，value变化
     const input = numberFiled.find('input')
-    input.element.value = '123'
+    input.element.value = '123' // 这种方式修改值  因为类型是数字，所以值是数字
     // 手动触发input事件
     input.trigger('input')
     expect(value).toBe(123)

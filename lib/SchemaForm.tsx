@@ -24,7 +24,7 @@ export default defineComponent({
   setup (props, { slots, emit, attrs }) {
     // 再做一层数据转化
     const handleChange = (v: any) => {
-      // console.log('v', typeof v)
+      // console.log('v', v)
       props.onChange(v)
     }
 

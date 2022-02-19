@@ -109,6 +109,7 @@ export default defineComponent({
       const { value } = props
       const arr = Array.isArray(value) ? value : []
       arr[index] = v
+      // console.log('ArrayField', arr)
       props.onChange(arr)
     }
 

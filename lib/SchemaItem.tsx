@@ -1,4 +1,4 @@
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
 import NumberField from './fields/NumberField'
 import StringField from './fields/StringField'
 // import StringField from './fields/StringField.vue'
@@ -20,10 +20,11 @@ export default defineComponent({
       const { schema, rootSchema, value } = props
       return retrieveSchema(schema, rootSchema, value)
     })
+    // console.log('retrievedSchemaRef: ', retrievedSchemaRef.value)
 
     return () => {
       const { schema } = props
-      // console.log('schema: ', schema)
+      // console.log('schemaItem: ', props.value)
 
       const retrievedSchema = retrievedSchemaRef.value
 
