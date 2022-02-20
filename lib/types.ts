@@ -96,22 +96,23 @@ export enum SelectionWidgetNames {
   SelectionWidget = 'SelectionWidget',
 }
 
+// 作为props定义
 export const CommonWidgetPropsDefine = {
   value: {},
   onChange: {
     type: Function as PropType<(v: any) => void>,
     required: true
-  },
-  errors: {
-    type: Array as PropType<string[]>
-  },
-  schema: {
-    type: Object as PropType<Schema>,
-    required: true
-  },
-  options: {
-    type: Object as PropType<{ [key: string]: any }>
   }
+  // errors: {
+  //   type: Array as PropType<string[]>
+  // },
+  // schema: {
+  //   type: Object as PropType<Schema>,
+  //   required: true
+  // },
+  // options: {
+  //   type: Object as PropType<{ [key: string]: any }>
+  // }
 } as const
 
 export const SelectionWidgetPropsDefine = {
@@ -127,6 +128,7 @@ export const SelectionWidgetPropsDefine = {
   }
 } as const
 
+// 组件类型定义
 export type CommonWidgetDefine = DefineComponent<typeof CommonWidgetPropsDefine>
 export type SelectionWidgetDefine = DefineComponent<
   typeof SelectionWidgetPropsDefine

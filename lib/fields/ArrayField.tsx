@@ -1,8 +1,10 @@
 import { defineComponent, PropType } from 'vue'
-import { FiledPropsDefine, Schema } from '../types'
+import { FiledPropsDefine, Schema, SelectionWidgetName } from '../types'
 import { useVJSFContext } from '../context'
 import { createUseStyles } from 'vue-jss'
-import SelectionWidget from '../widgets/Selection'
+
+// 会从inject content 中得到渲染组件 theme 里面包含有渲染组件
+// import SelectionWidget from '../widgets/Selection'
 
 // css in js 样式生成
 // 用 jss 调写样式
@@ -149,6 +151,9 @@ export default defineComponent({
       // 渲染 SchemaItem 节点
       const { schema, rootSchema, value } = props
       const { SchemaItem } = context
+      // 获取 SelectionWidget组件
+      const SelectionWidget = context.theme.widgets[SelectionWidgetName.SelectionWidget]
+
       // 数组的情况
       const isMultiType = Array.isArray(schema.items)
       // 单种情况

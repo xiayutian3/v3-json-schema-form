@@ -2,7 +2,7 @@ import { mount, shallowMount } from '@vue/test-utils'
 import { defineComponent, h } from 'vue'
 import JsonSchemaForm, { SelectionWidget, NumberField, StringField, ArrayField } from '../../lib'
 
-// yarn test:unit -- -t=multi  只执行这个it测试用例， -it 后面会正则匹配名称
+// yarn test:unit -- -t=multi  只执行这个it测试用例， -it 后面会正则匹配名称,前面第一个-- 后面的 -t=multi 在命令运行后，传入test:unit 对应的命令中
 
 // npx jest tests/unit/ObjectFiled.spec.ts  执行某个测试文件
 
