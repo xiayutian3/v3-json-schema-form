@@ -19,11 +19,11 @@ export default defineComponent({
     onChange: {
       type: Function as PropType<(val: any)=> void>,
       required: true
-    },
-    theme: { // 里边是每一个渲染组件，所有的渲染组件都在里边
-      type: Object as PropType<Theme>,
-      required: true
     }
+    // theme: { // 里边是每一个渲染组件，所有的渲染组件都在里边
+    //   type: Object as PropType<Theme>,
+    //   required: true
+    // }
   },
   setup (props, { slots, emit, attrs }) {
     // 再做一层数据转化
@@ -34,8 +34,8 @@ export default defineComponent({
 
     // 提供传递的内容,传递schemaItem组件,需要动态数据的话，就要用ractive定义数据
     const context: any = {
-      SchemaItem,
-      theme: props.theme // 所有的渲染组件都在里边
+      SchemaItem
+      // theme: props.theme // 所有的渲染组件都在里边
     }
     provide(SchemaFormContextKey, context)
 

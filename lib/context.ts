@@ -6,7 +6,7 @@ export const SchemaFormContextKey = Symbol('')
 
 // 获取传递的 schemaItem组件
 export function useVJSFContext () {
-  const context: {theme:Theme, SchemaItem: CommonFieldType } | undefined = inject(SchemaFormContextKey)
+  const context: {SchemaItem: CommonFieldType } | undefined = inject(SchemaFormContextKey)
 
   if (!context) {
     throw Error('SchemaForm needed')

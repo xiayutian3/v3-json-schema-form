@@ -1,21 +1,11 @@
 // 多选的表单组件
 
 import { defineComponent, PropType, ref, watch } from 'vue'
+import { SelectionWidgetPropsDefine, SelectionWidgetDefine } from '../types'
 
-export default defineComponent({
+const Selection:SelectionWidgetDefine = defineComponent({
   name: 'SelectionWidget',
-  props: {
-    value: {},
-    onChange: {
-      type: Function as PropType<(v: any)=> void>,
-      required: true
-    },
-    options: {
-      type: Array as PropType<{key:string, value:any}[]>,
-      required: true
-    }
-
-  },
+  props: SelectionWidgetPropsDefine,
   setup (props) {
     const currentValue = ref(props.value)
 
@@ -41,4 +31,6 @@ export default defineComponent({
       </select>
     }
   }
-})
+}) as SelectionWidgetDefine
+
+export default Selection
