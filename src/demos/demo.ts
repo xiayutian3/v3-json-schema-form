@@ -3,7 +3,7 @@
 export default {
   name: 'Demo',
   schema: {
-    type: 'number',
+    type: 'string',
     properties: {
       pass1: {
         type: 'string',
