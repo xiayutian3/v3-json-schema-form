@@ -2,7 +2,7 @@ import { CommonWidgetPropsDefine, SelectionWidgetName, CommonWidgetNames, Common
 import { defineComponent } from 'vue'
 
 // 组件定义
-const TextWidget:CommonWidgetDefine = defineComponent({
+const NumberWidget:CommonWidgetDefine = defineComponent({
   props: CommonWidgetPropsDefine,
   setup (props) {
     const handleChange = (v: any) => {
@@ -13,10 +13,10 @@ const TextWidget:CommonWidgetDefine = defineComponent({
     return () => {
       const { value } = props
       return (
-        <input type="text" value={value as any} onInput={handleChange} />
+        <input type="number" value={value as any} onInput={handleChange} />
       )
     }
   }
 }) as unknown as CommonWidgetDefine
 
-export default TextWidget
+export default NumberWidget
