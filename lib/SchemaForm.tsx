@@ -1,9 +1,16 @@
 
-import { defineComponent, PropType, provide, reactive } from 'vue'
+import { defineComponent, PropType, provide, reactive, Ref, watch } from 'vue'
 import SchemaItem from './SchemaItem'
 
 import { Schema, SchemaTypes, Theme } from './types'
 import { SchemaFormContextKey } from './context'
+
+interface ContextRef {
+  doValidate:()=>({
+    errors:any[],
+    valid:boolean
+  })
+}
 
 // jsx的形式写组件
 export default defineComponent({
@@ -19,6 +26,9 @@ export default defineComponent({
     onChange: {
       type: Function as PropType<(val: any)=> void>,
       required: true
+    },
+    contextRef: {
+      type: Object as PropType<Ref<ContextRef | undefined>>
     }
     // theme: { // 里边是每一个渲染组件，所有的渲染组件都在里边
     //   type: Object as PropType<Theme>,
@@ -38,6 +48,29 @@ export default defineComponent({
       // theme: props.theme // 所有的渲染组件都在里边
     }
     provide(SchemaFormContextKey, context)
+
+    // 用来做schema的校验
+    watch(
+      () => props.contextRef,
+      () => {
+        if (props.contextRef) {
+          // eslint-disable-next-line vue/no-mutating-props
+          props.contextRef.value = {
+            doValidate () {
+              console.log('------')
+              return {
+                valid: true,
+                errors: []
+              }
+            }
+          }
+        }
+      },
+      {
+        immediate: true
+      }
+
+    )
 
     return () => {
       const { schema, value } = props

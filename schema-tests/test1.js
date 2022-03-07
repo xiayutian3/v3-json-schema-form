@@ -32,9 +32,14 @@ const schema = {
     name: {
       type: 'string',
       // format: 'email' //格式  ，字符串 email格式 ,之前提供的email格式
-      // format: 'test'  // 使用我们自定义的 format test格式
+      // format: 'test',  // 使用我们自定义的 format test格式
       test: true, //自定义关键字
-      // minLength: 10
+      
+      // errorMessage:{   //自定义错误消息
+      //   type:'必须是字符串',
+      //   minLength:'长度必须大于10'
+      // },
+      // minLength: 10,
     },
     age: {
       type: 'number',
@@ -43,7 +48,8 @@ const schema = {
       type: 'array',
       items: [
         {
-          type: 'string'
+          type: 'string',
+          maxLength:2
         },
         {
           type: 'number',
@@ -58,7 +64,7 @@ const schema = {
   },
   required: ['name', 'age'],
   additionalProperties: false,
-  errorMessage: {
+  errorMessage: {  //自定义错误消息
     properties: {
       name: '字符串且长度大于10'
     }
@@ -136,7 +142,8 @@ const validate = ajv.compile(schema)
 const data = {
   // name: 'heelso@aaa.com',
   //验证自定义的format
-  name: 'hahajsjsjsjksks',
+  // name: 'hahajsjsjsjksks',
+  name: 'hi',
   age: 18,
   pets: ['mimi', 12],
   isworker: true
