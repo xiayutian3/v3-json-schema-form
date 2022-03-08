@@ -1,15 +1,22 @@
 
-import { defineComponent, PropType, provide, reactive, Ref, watch } from 'vue'
+import { defineComponent, PropType, provide, reactive, Ref, shallowRef, watch, watchEffect } from 'vue'
 import SchemaItem from './SchemaItem'
 
 import { Schema, SchemaTypes, Theme } from './types'
 import { SchemaFormContextKey } from './context'
+import Ajv, { Options } from 'ajv'
+import { validateFormData } from './validator' // 错误消息转换函数
 
 interface ContextRef {
   doValidate:()=>({
     errors:any[],
     valid:boolean
   })
+}
+
+// 使用 ajvErrors 必须要使用的配置
+const defaultAjvOptions:Options = {
+  allErrors: true
 }
 
 // jsx的形式写组件
@@ -29,6 +36,13 @@ export default defineComponent({
     },
     contextRef: {
       type: Object as PropType<Ref<ContextRef | undefined>>
+    },
+    ajvOptions: { // ajv 配置对象
+      type: Object as PropType<Options>
+    },
+    locale: {
+      type: String,
+      default: 'zh'
     }
     // theme: { // 里边是每一个渲染组件，所有的渲染组件都在里边
     //   type: Object as PropType<Theme>,
@@ -49,6 +63,15 @@ export default defineComponent({
     }
     provide(SchemaFormContextKey, context)
 
+    // 创建ajv实例
+    const validatorRef:Ref<Ajv> = shallowRef() as any
+    watchEffect(() => {
+      validatorRef.value = new Ajv({
+        ...defaultAjvOptions,
+        ...props.ajvOptions
+      })
+    })
+
     // 用来做schema的校验
     watch(
       () => props.contextRef,
@@ -57,11 +80,18 @@ export default defineComponent({
           // eslint-disable-next-line vue/no-mutating-props
           props.contextRef.value = {
             doValidate () {
-              console.log('------')
-              return {
-                valid: true,
-                errors: []
-              }
+              // console.log('------')
+              // 表单校验
+              // const valid = validatorRef.value.validate(props.schema, props.value)
+
+              const result = validateFormData(validatorRef.value, props.value, props.schema, props.locale)
+
+              // return {
+              //   valid: valid,
+              //   errors: validatorRef.value.errors || []
+              // }
+
+              return result
             }
           }
         }
