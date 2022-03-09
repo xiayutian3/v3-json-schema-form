@@ -74,7 +74,7 @@ export default defineComponent({
 
     return () => {
       // 渲染 SchemaItem 节点
-      const { schema, rootSchema, value } = props
+      const { schema, rootSchema, value, errorSchema } = props
       const { SchemaItem } = context
       const properties = schema.properties || {}
       const currentValue: any = isObject(value) ? value : {}
@@ -83,6 +83,7 @@ export default defineComponent({
           schema={properties[key]}
           rootSchema={rootSchema}
           value={currentValue[key]}
+          errorSchema={errorSchema[key] || {}}
           onChange={(v: any) => handleObjectFieldChange(key, v)}
           key={index}
         />

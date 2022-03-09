@@ -5,7 +5,7 @@ import SchemaItem from './SchemaItem'
 import { Schema, SchemaTypes, Theme } from './types'
 import { SchemaFormContextKey } from './context'
 import Ajv, { Options } from 'ajv'
-import { validateFormData } from './validator' // 错误消息转换函数
+import { validateFormData, ErrorSchema } from './validator' // 错误消息转换函数
 
 interface ContextRef {
   doValidate:()=>({
@@ -63,6 +63,8 @@ export default defineComponent({
     }
     provide(SchemaFormContextKey, context)
 
+    const errorSchemaRef:Ref<ErrorSchema> = shallowRef({})
+
     // 创建ajv实例
     const validatorRef:Ref<Ajv> = shallowRef() as any
     watchEffect(() => {
@@ -84,7 +86,14 @@ export default defineComponent({
               // 表单校验
               // const valid = validatorRef.value.validate(props.schema, props.value)
 
-              const result = validateFormData(validatorRef.value, props.value, props.schema, props.locale)
+              const result = validateFormData(
+                validatorRef.value,
+                props.value,
+                props.schema,
+                props.locale
+              )
+              // 赋值错误的shcema
+              errorSchemaRef.value = result.errorSchema
 
               // return {
               //   valid: valid,
@@ -104,7 +113,13 @@ export default defineComponent({
 
     return () => {
       const { schema, value } = props
-      return <SchemaItem schema={schema} rootSchema={schema} value={value} onChange={handleChange}/>
+      return <SchemaItem
+        schema={schema}
+        rootSchema={schema}
+        value={value}
+        onChange={handleChange}
+        errorSchema={errorSchemaRef.value || {}}
+      />
     }
   }
 })

@@ -153,7 +153,7 @@ export default defineComponent({
 
     return () => {
       // 渲染 SchemaItem 节点
-      const { schema, rootSchema, value } = props
+      const { schema, rootSchema, value, errorSchema } = props
       const { SchemaItem } = context
       // 获取 SelectionWidget组件
       // const SelectionWidget = context.theme.widgets[SelectionWidgetName.SelectionWidget]
@@ -174,6 +174,7 @@ export default defineComponent({
               schema={s}
               rootSchema={rootSchema}
               value={arr[index]}
+              errorSchema={errorSchema[index] || {}}
               onChange={(v: any) => handleArrayItemChange(v, index)}
               key={index}
             />
@@ -189,6 +190,7 @@ export default defineComponent({
                 schema={schema.items as Schema}
                 rootSchema={rootSchema}
                 value={v}
+                errorSchema={errorSchema[index] || {}}
                 onChange={(v: any) => handleArrayItemChange(v, index)}
                 key={index}
               />
@@ -202,7 +204,12 @@ export default defineComponent({
           key: e,
           value: e
         }))
-        return <SelectionWidget onChange={props.onChange} value={props.value} options={options}/>
+        return <SelectionWidget
+          onChange={props.onChange}
+          value={props.value}
+          options={options}
+          errors={errorSchema.__errors}
+        />
       }
 
       // return <div>hehe</div>

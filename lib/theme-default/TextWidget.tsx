@@ -3,6 +3,7 @@ import { defineComponent } from 'vue'
 
 // 组件定义
 const TextWidget:CommonWidgetDefine = defineComponent({
+  name: 'TextWidget',
   props: CommonWidgetPropsDefine,
   setup (props) {
     const handleChange = (v: any) => {

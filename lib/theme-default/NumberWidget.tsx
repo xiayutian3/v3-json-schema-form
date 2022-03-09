@@ -3,6 +3,7 @@ import { defineComponent } from 'vue'
 
 // 组件定义
 const NumberWidget:CommonWidgetDefine = defineComponent({
+  name: 'NumberWidget',
   props: CommonWidgetPropsDefine,
   setup (props) {
     const handleChange = (v: any) => {

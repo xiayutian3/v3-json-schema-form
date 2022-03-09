@@ -2,6 +2,7 @@ import type { PropType, DefineComponent } from 'vue'
 // import type { ErrorSchema } from './validator'
 
 import type { FormatDefinition } from 'ajv'
+import { ErrorSchema } from './validator'
 
 // 会把一些通用的类型统一放在这个 ts 文件里面
 export enum SchemaTypes {
@@ -69,15 +70,15 @@ export const FiledPropsDefine = {
   onChange: {
     type: Function as PropType<(v: any) => void>,
     required: true
-  }
+  },
   // uiSchema: {
   //   type: Object as PropType<UISchema>,
   //   required: true
   // }
-  // errorSchema: {
-  //   type: Object as PropType<ErrorSchema>,
-  //   required: true
-  // }
+  errorSchema: {
+    type: Object as PropType<ErrorSchema>,
+    required: true
+  }
 } as const
 
 // // 声明SchemaItem组件的类型，FiledPropsDefine只是我们声明的对象， ExtractPropTypes帮助我们拿到props类型
@@ -102,10 +103,10 @@ export const CommonWidgetPropsDefine = {
   onChange: {
     type: Function as PropType<(v: any) => void>,
     required: true
+  },
+  errors: {
+    type: Array as PropType<string[]>
   }
-  // errors: {
-  //   type: Array as PropType<string[]>
-  // },
   // schema: {
   //   type: Object as PropType<Schema>,
   //   required: true

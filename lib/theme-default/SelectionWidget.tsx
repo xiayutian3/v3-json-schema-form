@@ -24,6 +24,7 @@ const Selection:SelectionWidgetDefine = defineComponent({
 
     return () => {
       const options = props.options
+      // console.log('options: ', options)
       return <select multiple={true} v-model={currentValue.value}>
         {
           options.map((op) => <option value={op.value}>{op.key}</option>)
