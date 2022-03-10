@@ -2,8 +2,10 @@
 
 import { defineComponent, PropType, ref, watch } from 'vue'
 import { SelectionWidgetPropsDefine, SelectionWidgetDefine } from '../types'
+// 组件解耦(高阶组件) 复用
+import { withFormItem } from './FormItem'
 
-const Selection:SelectionWidgetDefine = defineComponent({
+const Selection:SelectionWidgetDefine = withFormItem(defineComponent({
   name: 'SelectionWidget',
   props: SelectionWidgetPropsDefine,
   setup (props) {
@@ -32,6 +34,6 @@ const Selection:SelectionWidgetDefine = defineComponent({
       </select>
     }
   }
-}) as SelectionWidgetDefine
+})) as SelectionWidgetDefine
 
 export default Selection

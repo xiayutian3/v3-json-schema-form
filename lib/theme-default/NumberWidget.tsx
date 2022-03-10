@@ -1,8 +1,10 @@
 import { CommonWidgetPropsDefine, SelectionWidgetName, CommonWidgetNames, CommonWidgetDefine } from '../types'
 import { defineComponent } from 'vue'
+// 组件解耦(高阶组件) 复用
+import { withFormItem } from './FormItem'
 
 // 组件定义
-const NumberWidget:CommonWidgetDefine = defineComponent({
+const NumberWidget:CommonWidgetDefine = withFormItem(defineComponent({
   name: 'NumberWidget',
   props: CommonWidgetPropsDefine,
   setup (props) {
@@ -18,6 +20,6 @@ const NumberWidget:CommonWidgetDefine = defineComponent({
       )
     }
   }
-}) as unknown as CommonWidgetDefine
+})) as unknown as CommonWidgetDefine
 
 export default NumberWidget

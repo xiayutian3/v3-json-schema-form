@@ -17,7 +17,7 @@ export default defineComponent({
       // const { value } = props
       const TextWidget = TextWidgetRef.value
       // 将剩余参数拿到 rest，   schema rootSchema是我们不要的
-      const { schema, rootSchema, errorSchema, ...rest } = props
+      const { rootSchema, errorSchema, ...rest } = props
       return (
         // <div>string field</div>
         // <input type="text" value={value as any} onInput={handleChange} />

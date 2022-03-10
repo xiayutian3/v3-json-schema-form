@@ -4,7 +4,8 @@ export default {
   name: 'Demo',
   schema: {
     type: 'string',
-    minLength: 10
+    minLength: 10,
+    title: 'demo'
     // properties: {
     //   pass1: {
     //     type: 'string',
