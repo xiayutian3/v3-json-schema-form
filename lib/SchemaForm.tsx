@@ -1,5 +1,5 @@
 
-import { defineComponent, PropType, provide, reactive, Ref, shallowRef, watch, watchEffect } from 'vue'
+import { defineComponent, PropType, provide, reactive, ref, Ref, shallowRef, watch, watchEffect } from 'vue'
 import SchemaItem from './SchemaItem'
 
 import { Schema, SchemaTypes, Theme } from './types'
@@ -8,10 +8,10 @@ import Ajv, { Options } from 'ajv'
 import { validateFormData, ErrorSchema } from './validator' // 错误消息转换函数
 
 interface ContextRef {
-  doValidate:()=>({
+  doValidate:()=> Promise<{
     errors:any[],
     valid:boolean
-  })
+  }>
 }
 
 // 使用 ajvErrors 必须要使用的配置
@@ -77,6 +77,47 @@ export default defineComponent({
       })
     })
 
+    // 保存异步校验结果的方式
+    const validateResolveRef = ref()
+    // 记录validateFormData 校验方法调用的次数
+    const validateIndex = ref(0)
+
+    // 数据变化重新调用校验方法
+    watch(() => props.value, () => {
+      if (validateResolveRef.value) {
+        doValidate()
+      }
+    }, { // 深度监听
+      deep: true
+    })
+
+    // 返回错误的方法
+    async function doValidate () {
+      console.log('start validate ----------')
+      const index = validateIndex.value += 1
+      const result = await validateFormData(
+        validatorRef.value,
+        props.value,
+        props.schema,
+        props.locale,
+        props.customValidate
+      )
+
+      // 记录校验的次数，本次异步校验的上下文的 index 和 validateIndex.value不一致，说明中间又发生了几次校验
+      if (index !== validateIndex.value) return
+      console.log('end validate ----------')
+
+      // 赋值错误的shcema
+      errorSchemaRef.value = result.errorSchema
+
+      // resolve 结果
+      validateResolveRef.value(result)
+      // 结束后清空
+      validateResolveRef.value = ''
+
+      // return result
+    }
+
     // 用来做schema的校验
     watch(
       () => props.contextRef,
@@ -86,25 +127,34 @@ export default defineComponent({
           props.contextRef.value = {
             doValidate () {
               // console.log('------')
-              // 表单校验
-              // const valid = validatorRef.value.validate(props.schema, props.value)
 
-              const result = validateFormData(
-                validatorRef.value,
-                props.value,
-                props.schema,
-                props.locale,
-                props.customValidate
-              )
-              // 赋值错误的shcema
-              errorSchemaRef.value = result.errorSchema
+              // 表单校验  1
+              // const valid = validatorRef.value.validate(props.schema, props.value)
 
               // return {
               //   valid: valid,
               //   errors: validatorRef.value.errors || []
               // }
 
-              return result
+              // 表单校验  2(异步)
+              // const result = await validateFormData(
+              //   validatorRef.value,
+              //   props.value,
+              //   props.schema,
+              //   props.locale,
+              //   props.customValidate
+              // )
+              // // 赋值错误的shcema
+              // errorSchemaRef.value = result.errorSchema
+              // return result
+
+              // 表单校验  3(异步)
+              // 异步校验，数值变化后应该重新校验，而不是返回上一次校验的结果
+              return new Promise((resolve) => {
+                validateResolveRef.value = resolve
+                // 返回校验结果
+                doValidate()
+              })
             }
           }
         }

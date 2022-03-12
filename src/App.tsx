@@ -137,12 +137,19 @@ export default defineComponent({
     const contextRef = ref()
     const nameRef = ref()
 
+    // 表单校验 异步方法 -》 doValidate
+    function validateForm () {
+      contextRef.value.doValidate().then((res:any) => {
+        console.log('res: ', res)
+      })
+    }
+
     return () => {
       const classes = classesRef.value
       const selected = selectedRef.value
 
       // console.log(methodRef)
-      console.log(nameRef)
+      // console.log(nameRef)
 
       return (
         // <StyleThemeProvider>
@@ -198,7 +205,7 @@ export default defineComponent({
                   customValidate={demo.customValidate}
                 />
               </ThemeProvider>
-              <button onClick={() => console.log(contextRef.value.doValidate()) }>校验</button>
+              <button onClick={validateForm }>校验</button>
 
               {/* <SchemaForm
                 schema={demo.schema!}

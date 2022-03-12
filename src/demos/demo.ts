@@ -75,10 +75,27 @@ export default {
     //   // }
     }
   },
-  customValidate (data: any, errors: any) {
-    if (data.pass1 !== data.pass2) {
-      errors.pass2.addError('密码必须相同')
-    }
+
+  // 同步情况
+  // customValidate (data: any, errors: any) {
+  //   if (data.pass1 !== data.pass2) {
+  //     errors.pass2.addError('密码必须相同')
+  //   }
+  // },
+
+  // 异步情况(返回一个promise)
+  async customValidate (data: any, errors: any) {
+    // if (data.pass1 !== data.pass2) {
+    //   errors.pass2.addError('密码必须相同')
+    // }
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        if (data.pass1 !== data.pass2) {
+          errors.pass2.addError('密码必须相同')
+        }
+        resolve(true)
+      }, 3000)
+    })
   },
   uiSchema: {
     // properties: {

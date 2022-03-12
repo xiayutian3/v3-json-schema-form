@@ -91,9 +91,9 @@ function transformErrors (errors:ErrorObject[] | null | undefined):TransformErro
 }
 
 // ajv校验
-export function validateFormData (
+export async function validateFormData (
   validator:Ajv,
-  formData:any,
+  formData:any, // reactive 对象
   schema:Schema,
   locale = 'zh',
   // 自定义错误类型
@@ -143,7 +143,8 @@ export function validateFormData (
    */
   // 自定义错误消息机制
   const proxy = createErrorProxy()
-  customValidate(formData, proxy)
+  // 异步处理 customValidate  promise
+  await customValidate(formData, proxy)
   const newErrorSchema = mergeObjects(errorSchema, proxy, true)
   return {
     errors,
@@ -152,7 +153,7 @@ export function validateFormData (
   }
 }
 
-// 代理函数 会生成一个 结构一样的对象
+// 代理函数 会生成一个formData 结构一样的对象
 function createErrorProxy () {
   const raw = {}
   return new Proxy(raw, {
