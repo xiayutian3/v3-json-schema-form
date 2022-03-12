@@ -43,6 +43,9 @@ export default defineComponent({
     locale: {
       type: String,
       default: 'zh'
+    },
+    customValidate: { // 自定义错误类型
+      type: Function as PropType<(data:any, errors:any)=>void>
     }
     // theme: { // 里边是每一个渲染组件，所有的渲染组件都在里边
     //   type: Object as PropType<Theme>,
@@ -90,7 +93,8 @@ export default defineComponent({
                 validatorRef.value,
                 props.value,
                 props.schema,
-                props.locale
+                props.locale,
+                props.customValidate
               )
               // 赋值错误的shcema
               errorSchemaRef.value = result.errorSchema
