@@ -2,7 +2,7 @@
 import { defineComponent, PropType, provide, reactive, ref, Ref, shallowRef, watch, watchEffect } from 'vue'
 import SchemaItem from './SchemaItem'
 
-import { Schema, SchemaTypes, Theme } from './types'
+import { Schema, SchemaTypes, Theme, UISchema } from './types'
 import { SchemaFormContextKey } from './context'
 import Ajv, { Options } from 'ajv'
 import { validateFormData, ErrorSchema } from './validator' // 错误消息转换函数
@@ -46,6 +46,9 @@ export default defineComponent({
     },
     customValidate: { // 自定义错误类型
       type: Function as PropType<(data:any, errors:any)=>void>
+    },
+    uiSchema: { // 自定义组件渲染
+      type: Object as PropType<UISchema>
     }
     // theme: { // 里边是每一个渲染组件，所有的渲染组件都在里边
     //   type: Object as PropType<Theme>,
@@ -166,12 +169,13 @@ export default defineComponent({
     )
 
     return () => {
-      const { schema, value } = props
+      const { schema, value, uiSchema } = props
       return <SchemaItem
         schema={schema}
         rootSchema={schema}
         value={value}
         onChange={handleChange}
+        uiSchema={uiSchema || {}}
         errorSchema={errorSchemaRef.value || {}}
       />
     }

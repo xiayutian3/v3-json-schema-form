@@ -74,13 +74,14 @@ export default defineComponent({
 
     return () => {
       // 渲染 SchemaItem 节点
-      const { schema, rootSchema, value, errorSchema } = props
+      const { schema, rootSchema, value, errorSchema, uiSchema } = props
       const { SchemaItem } = context
       const properties = schema.properties || {}
       const currentValue: any = isObject(value) ? value : {}
       return Object.keys(properties).map((key: string, index: number) => (
         <SchemaItem
           schema={properties[key]}
+          uiSchema={uiSchema.properties ? uiSchema.properties[key] || {} : {}}
           rootSchema={rootSchema}
           value={currentValue[key]}
           errorSchema={errorSchema[key] || {}}

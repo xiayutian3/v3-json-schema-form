@@ -1,4 +1,4 @@
-// import PasswordWidget from '@/components/PasswordWiget'
+import PasswordWidget from '@/components/PasswordWiget'
 
 // export default {
 //   name: 'Demo',
@@ -49,6 +49,7 @@
 //   default: 1
 // }
 
+// 另一种情况
 export default {
   name: 'Demo',
   schema: {
@@ -98,14 +99,14 @@ export default {
     })
   },
   uiSchema: {
-    // properties: {
-    //   pass1: {
-    //     // widget: PasswordWidget
-    //   },
-    //   pass2: {
-    //     color: 'red'
-    //   }
-    // }
+    properties: {
+      pass1: {
+        widget: PasswordWidget
+      }
+      // pass2: {
+      //   color: 'red'
+      // }
+    }
   },
   default: 1
 }

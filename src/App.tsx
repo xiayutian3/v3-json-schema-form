@@ -198,6 +198,7 @@ export default defineComponent({
               <ThemeProvider theme={themeDefault}>
                 <SchemaForm
                   schema={demo.schema}
+                  uiSchema={demo.uiSchema || {} }
                   value={demo.data}
                   onChange={handleChange}
                   contextRef={contextRef}

@@ -19,7 +19,7 @@ export default {
         type: 'string',
         minLength: 10
       },
-      staticArray: {
+      staticArray: { // 多类型数组
         title: 'staticArray',
         type: 'array',
         items: [
@@ -33,7 +33,7 @@ export default {
           }
         ]
       },
-      singleTypeArray: {
+      singleTypeArray: { // 单类型数组
         title: 'singleTypeArray',
         type: 'array',
         items: {
@@ -51,7 +51,7 @@ export default {
           }
         }
       },
-      multiSelectArray: {
+      multiSelectArray: { // 多选数组类型
         title: 'multiSelectArray',
         type: 'array',
         items: {

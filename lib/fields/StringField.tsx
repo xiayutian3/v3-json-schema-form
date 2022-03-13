@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { FiledPropsDefine, CommonWidgetNames } from '../types'
 import { getWidget } from '../theme'
 
@@ -11,7 +11,10 @@ export default defineComponent({
       props.onChange(v)
     }
 
-    const TextWidgetRef = getWidget(CommonWidgetNames.TextWidget)
+    const TextWidgetRef = computed(() => {
+      const widget = getWidget(CommonWidgetNames.TextWidget, props.uiSchema)
+      return widget.value
+    })
 
     return () => {
       // const { value } = props

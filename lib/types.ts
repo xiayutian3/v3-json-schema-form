@@ -71,11 +71,11 @@ export const FiledPropsDefine = {
     type: Function as PropType<(v: any) => void>,
     required: true
   },
-  // uiSchema: {
-  //   type: Object as PropType<UISchema>,
-  //   required: true
-  // }
-  errorSchema: {
+  uiSchema: { // 自定义渲染组件
+    type: Object as PropType<UISchema>,
+    required: true
+  },
+  errorSchema: { // 自定义错误shcema
     type: Object as PropType<ErrorSchema>,
     required: true
   }
@@ -153,11 +153,11 @@ export interface Theme {
 }
 
 export type UISchema = {
-  widget?: string | CommonWidgetDefine
+  widget?: string | CommonWidgetDefine // string 是 组件名字 ,要么是传一个组件，组件的类型
   properties?: {
     [key: string]: UISchema
   }
-  items?: UISchema | UISchema[]
+  items?: UISchema | UISchema[] // 单类型，多类型就要传一个数组
 } & {
   [key: string]: any // w: 开头
 }

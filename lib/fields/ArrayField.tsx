@@ -153,7 +153,7 @@ export default defineComponent({
 
     return () => {
       // 渲染 SchemaItem 节点
-      const { schema, rootSchema, value, errorSchema } = props
+      const { schema, rootSchema, value, errorSchema, uiSchema } = props
       const { SchemaItem } = context
       // 获取 SelectionWidget组件
       // const SelectionWidget = context.theme.widgets[SelectionWidgetName.SelectionWidget]
@@ -169,9 +169,13 @@ export default defineComponent({
         const items: Schema[] = schema.items as any
         const arr = Array.isArray(value) ? value : []
         return items.map((s: Schema, index: number) => {
+          const itemsUiSchema = uiSchema.items
+          // uischema的类型
+          const us = Array.isArray(itemsUiSchema) ? itemsUiSchema[index] || {} : itemsUiSchema || {}
           return (
             <SchemaItem
               schema={s}
+              uiSchema={us}
               rootSchema={rootSchema}
               value={arr[index]}
               errorSchema={errorSchema[index] || {}}
@@ -188,6 +192,7 @@ export default defineComponent({
             <ArrayItemWrapper index={index} onAdd={handleAdd} onDelete={handleDelete} onUp={handleUp} onDown={handleDown}>
               <SchemaItem
                 schema={schema.items as Schema}
+                uiSchema={(uiSchema.items as any) || {}}
                 rootSchema={rootSchema}
                 value={v}
                 errorSchema={errorSchema[index] || {}}
