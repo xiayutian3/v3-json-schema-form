@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue'
+import { defineComponent, markRaw } from 'vue'
 import { CommonWidgetPropsDefine, CommonWidgetDefine } from '../types'
 import { createUseStyles } from 'vue-jss'
 const useStyles = createUseStyles({
@@ -41,18 +41,20 @@ export default FormItem
 
 // 组件解耦(高阶组件)   HOC：higher order Component
 export function withFormItem (Widget: any) {
-  return defineComponent({
+  // 如题，这句提示是自己使用 动态组件component 时控制台打印的 warning，解决方式是将 is 传入的组件使用 markRaw函数标记，让其永远不会转换为 proxy 。返回对象本身。
+  // https://www.xianh5.com/archives/60/
+  return markRaw(defineComponent({
     name: `Wrapped${Widget.name}`,
     props: CommonWidgetPropsDefine,
     setup (props, { attrs, slots }) {
       return () => {
         return (
           <FormItem {...props}>
-            {/* //如果有插槽内容  */}
+            {/* //如果有插槽内容  所有的属性  */}
             <Widget {...props} {...attrs} {...slots}></Widget>
           </FormItem>
         )
       }
     }
-  }) as any
+  })) as any
 }

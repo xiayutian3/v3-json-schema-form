@@ -110,10 +110,10 @@ export const CommonWidgetPropsDefine = {
   schema: {
     type: Object as PropType<Schema>,
     required: true
+  },
+  options: { // 可以传任何自定义的参数
+    type: Object as PropType<{ [key: string]: any }>
   }
-  // options: {
-  //   type: Object as PropType<{ [key: string]: any }>
-  // }
 } as const
 
 export const SelectionWidgetPropsDefine = {

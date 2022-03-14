@@ -68,12 +68,13 @@ export default {
         type: 'string',
         minLength: 10,
         title: 're try password'
+      },
+      // 自定义format  扩展ajv 渲染组件
+      color: {
+        type: 'string',
+        format: 'color', // 有format 渲染成colorWidget组件
+        title: 'Input Color'
       }
-    //   // color: {
-    //   //   type: 'string',
-    //   //   format: 'color',
-    //   //   title: 'Input Color'
-    //   // }
     }
   },
 
@@ -98,14 +99,15 @@ export default {
       }, 3000)
     })
   },
-  uiSchema: {
+  uiSchema: { // 使用自定义的组件渲染
     properties: {
       pass1: {
-        widget: PasswordWidget
+        widget: PasswordWidget // PasswordWidget组件渲染 pass1这个字段
+        // color: 'red'
+      },
+      pass2: {
+        color: 'red'
       }
-      // pass2: {
-      //   color: 'red'
-      // }
     }
   },
   default: 1

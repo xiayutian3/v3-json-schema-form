@@ -1,6 +1,8 @@
-import { computed, ComputedRef, defineComponent, inject, PropType, provide, ref } from 'vue'
-import { Theme, SelectionWidgetName, CommonWidgetNames, UISchema, CommonWidgetDefine } from './types'
+import { computed, ComputedRef, defineComponent, ExtractPropTypes, inject, PropType, provide, ref } from 'vue'
+import { Theme, SelectionWidgetName, CommonWidgetNames, UISchema, CommonWidgetDefine, FiledPropsDefine } from './types'
 import { isObject } from './utils'
+import { useVJSFContext } from './context'
+
 // 唯一key
 const THEME_PROVIDER_KEY = Symbol('')
 
@@ -24,10 +26,22 @@ const ThemeProvider = defineComponent({
 // 获取 传递的theme，有可能用户没传，undefined
 // theme widget都做到动态变化
 // 泛型 T是来自于 SelectionWidgetName 或者是 CommonWidgetNames 里面所有的key的
-export function getWidget<T extends SelectionWidgetName | CommonWidgetNames> (name: T, uiSchema?:UISchema) {
-  // 使用uiSchema ,自定义渲染组件
-  if (uiSchema?.widget && isObject(uiSchema.widget)) {
-    return ref(uiSchema.widget as CommonWidgetDefine)
+export function getWidget<T extends SelectionWidgetName | CommonWidgetNames> (name: T, props?: ExtractPropTypes< typeof FiledPropsDefine>) {
+  // 拿到自定义 ajv  的format的 渲染组件
+  const formatContext = useVJSFContext()
+
+  if (props) {
+    const { uiSchema, schema } = props
+    // 使用uiSchema ,自定义渲染组件
+    if (uiSchema?.widget && isObject(uiSchema.widget)) {
+      return ref(uiSchema.widget as CommonWidgetDefine)
+    }
+    // 拿到自定义 ajv  的format的 渲染组件
+    if (schema.format) {
+      if (formatContext.formatMapRef.value[schema.format]) {
+        return ref(formatContext.formatMapRef.value[schema.format])
+      }
+    }
   }
 
   const context:ComputedRef<Theme> | undefined = inject<ComputedRef<Theme>>(THEME_PROVIDER_KEY)

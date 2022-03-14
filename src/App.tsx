@@ -8,6 +8,8 @@ import demos from './demos'
 
 import SchemaForm, { ThemeProvider } from '../lib'
 import themeDefault from '../lib/theme-default/index'
+// 自定义format 组件
+import customFormat from './plugins/customFormat'
 
 // TODO: 在lib中export
 type Schema = any
@@ -203,6 +205,7 @@ export default defineComponent({
                   onChange={handleChange}
                   contextRef={contextRef}
                   ref={nameRef}
+                  customFormats={customFormat}
                   customValidate={demo.customValidate}
                 />
               </ThemeProvider>

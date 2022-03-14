@@ -12,8 +12,14 @@ export default defineComponent({
     }
 
     const TextWidgetRef = computed(() => {
-      const widget = getWidget(CommonWidgetNames.TextWidget, props.uiSchema)
+      const widget = getWidget(CommonWidgetNames.TextWidget, props)
       return widget.value
+    })
+
+    // 传递的options uiShema
+    const widgetOptionsRef = computed(() => {
+      const { widget, properties, items, ...rest } = props.uiSchema
+      return rest
     })
 
     return () => {
@@ -26,7 +32,7 @@ export default defineComponent({
         // <input type="text" value={value as any} onInput={handleChange} />
         // 已经换成widget了
         // 如果传两个相同key 的props vue在处理的时候 会默认帮我们mergeProps，变成一个数组，长度为2，如果想是使用我们指定的props，就需要在babelconfig那里设置
-        <TextWidget {...rest} errors={errorSchema.__errors} onChange={handleChange}/>
+        <TextWidget options={widgetOptionsRef.value} {...rest} errors={errorSchema.__errors} onChange={handleChange}/>
       )
     }
   }

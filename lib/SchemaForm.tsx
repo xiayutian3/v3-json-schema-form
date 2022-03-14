@@ -1,8 +1,8 @@
 
-import { defineComponent, PropType, provide, reactive, ref, Ref, shallowRef, watch, watchEffect } from 'vue'
+import { computed, defineComponent, PropType, provide, reactive, ref, Ref, shallowRef, watch, watchEffect } from 'vue'
 import SchemaItem from './SchemaItem'
 
-import { Schema, SchemaTypes, Theme, UISchema } from './types'
+import { CommonWidgetDefine, CustomFormat, Schema, SchemaTypes, Theme, UISchema } from './types'
 import { SchemaFormContextKey } from './context'
 import Ajv, { Options } from 'ajv'
 import { validateFormData, ErrorSchema } from './validator' // 错误消息转换函数
@@ -47,6 +47,9 @@ export default defineComponent({
     customValidate: { // 自定义错误类型
       type: Function as PropType<(data:any, errors:any)=>void>
     },
+    customFormats: { // 扩展ajv farmat
+      type: [Array, Object] as PropType<CustomFormat[] | CustomFormat>
+    },
     uiSchema: { // 自定义组件渲染
       type: Object as PropType<UISchema>
     }
@@ -62,9 +65,23 @@ export default defineComponent({
       props.onChange(v)
     }
 
+    // 扩展ajv 自定义key，渲染的自定义组件
+    const formatMapRef = computed(() => {
+      if (props.customFormats) {
+        const customFormats = Array.isArray(props.customFormats) ? props.customFormats : [props.customFormats]
+        return customFormats.reduce((result, format) => {
+          result[format.name] = format.component
+          return result
+        }, {} as {[key: string]:CommonWidgetDefine})
+      } else {
+        return {}
+      }
+    })
+
     // 提供传递的内容,传递schemaItem组件,需要动态数据的话，就要用ractive定义数据
     const context: any = {
-      SchemaItem
+      SchemaItem,
+      formatMapRef
       // theme: props.theme // 所有的渲染组件都在里边
     }
     provide(SchemaFormContextKey, context)
@@ -78,6 +95,15 @@ export default defineComponent({
         ...defaultAjvOptions,
         ...props.ajvOptions
       })
+
+      // 添加 ajv 我们自定义的format  就是自定义的key，扩展校验
+      if (props.customFormats) {
+        const customFormats = Array.isArray(props.customFormats) ? props.customFormats : [props.customFormats]
+        customFormats.forEach(format => {
+          // 添加自定义的key 和校验
+          validatorRef.value.addFormat(format.name, format.definition)
+        })
+      }
     })
 
     // 保存异步校验结果的方式

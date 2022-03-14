@@ -1,8 +1,8 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" :age="18"/>
-  <p>{{name}}</p>
-  <p>{{computedRef}}</p>
+  <img alt="Vue logo" src="./assets/logo.png" />
+  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" :age="18" />
+  <p>{{ name }}</p>
+  <p>{{ computedRef }}</p>
 </template>
 
 <script lang="ts">
