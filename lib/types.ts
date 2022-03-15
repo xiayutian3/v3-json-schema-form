@@ -184,8 +184,9 @@ interface VjsfKeywordDefinition {
   macro: (schema: any, parentSchema: any, it: any) => any | boolean
 }
 
+// 扩展  自定义ajv关键字，检验
 export interface CustomKeyword {
   name: string
-  deinition: VjsfKeywordDefinition
-  transformSchema: (originSchema: Schema) => Schema
+  deinition: VjsfKeywordDefinition // 定义类型
+  transformSchema: (originSchema: Schema) => Schema // 转化成真正要渲染的shema
 }

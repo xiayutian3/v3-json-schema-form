@@ -1,21 +1,39 @@
-
-import { computed, defineComponent, PropType, provide, reactive, ref, Ref, shallowRef, watch, watchEffect } from 'vue'
+import {
+  computed,
+  defineComponent,
+  PropType,
+  provide,
+  reactive,
+  ref,
+  Ref,
+  shallowRef,
+  watch,
+  watchEffect
+} from 'vue'
 import SchemaItem from './SchemaItem'
 
-import { CommonWidgetDefine, CustomFormat, Schema, SchemaTypes, Theme, UISchema } from './types'
+import {
+  CommonWidgetDefine,
+  CustomFormat,
+  CustomKeyword,
+  Schema,
+  SchemaTypes,
+  Theme,
+  UISchema
+} from './types'
 import { SchemaFormContextKey } from './context'
 import Ajv, { Options } from 'ajv'
 import { validateFormData, ErrorSchema } from './validator' // 错误消息转换函数
 
 interface ContextRef {
-  doValidate:()=> Promise<{
-    errors:any[],
-    valid:boolean
-  }>
+  doValidate: () => Promise<{
+    errors: any[];
+    valid: boolean;
+  }>;
 }
 
 // 使用 ajvErrors 必须要使用的配置
-const defaultAjvOptions:Options = {
+const defaultAjvOptions: Options = {
   allErrors: true
 }
 
@@ -31,26 +49,34 @@ export default defineComponent({
       required: true
     },
     onChange: {
-      type: Function as PropType<(val: any)=> void>,
+      type: Function as PropType<(val: any) => void>,
       required: true
     },
     contextRef: {
       type: Object as PropType<Ref<ContextRef | undefined>>
     },
-    ajvOptions: { // ajv 配置对象
+    ajvOptions: {
+      // ajv 配置对象
       type: Object as PropType<Options>
     },
     locale: {
       type: String,
       default: 'zh'
     },
-    customValidate: { // 自定义错误类型
-      type: Function as PropType<(data:any, errors:any)=>void>
+    customValidate: {
+      // 自定义错误类型
+      type: Function as PropType<(data: any, errors: any) => void>
     },
-    customFormats: { // 扩展ajv farmat
+    customFormats: {
+      // 扩展ajv farmat ,渲染组件（多种类型组件）
       type: [Array, Object] as PropType<CustomFormat[] | CustomFormat>
     },
-    uiSchema: { // 自定义组件渲染
+    customKeywords: {
+      // 扩展ajv  自定义ajv关键字
+      type: [Array, Object] as PropType<CustomKeyword[] | CustomKeyword>
+    },
+    uiSchema: {
+      // 自定义组件渲染
       type: Object as PropType<UISchema>
     }
     // theme: { // 里边是每一个渲染组件，所有的渲染组件都在里边
@@ -68,40 +94,76 @@ export default defineComponent({
     // 扩展ajv 自定义key，渲染的自定义组件
     const formatMapRef = computed(() => {
       if (props.customFormats) {
-        const customFormats = Array.isArray(props.customFormats) ? props.customFormats : [props.customFormats]
+        const customFormats = Array.isArray(props.customFormats)
+          ? props.customFormats
+          : [props.customFormats]
         return customFormats.reduce((result, format) => {
           result[format.name] = format.component
           return result
-        }, {} as {[key: string]:CommonWidgetDefine})
+        }, {} as { [key: string]: CommonWidgetDefine })
       } else {
         return {}
       }
     })
 
+    // 扩展 ajv 自定义关键字功能
+    const transformSchemaRef = computed(() => {
+      if (props.customKeywords) {
+        const customKeywords = Array.isArray(props.customKeywords)
+          ? props.customKeywords
+          : [props.customKeywords]
+
+        return (schema: Schema) => {
+          let newSchema = schema
+          console.log('newSchema: ', newSchema)
+          customKeywords.forEach((keyword) => { // 找到对应要扩展的字段test，才去newSchema填充进去
+            if ((newSchema as any)[keyword.name]) {
+              newSchema = keyword.transformSchema(schema)
+            }
+          })
+          return newSchema
+        }
+      }
+      return (s: Schema) => s
+    })
+
     // 提供传递的内容,传递schemaItem组件,需要动态数据的话，就要用ractive定义数据
     const context: any = {
       SchemaItem,
-      formatMapRef
+      formatMapRef,
+      transformSchemaRef
       // theme: props.theme // 所有的渲染组件都在里边
     }
     provide(SchemaFormContextKey, context)
 
-    const errorSchemaRef:Ref<ErrorSchema> = shallowRef({})
+    const errorSchemaRef: Ref<ErrorSchema> = shallowRef({})
 
     // 创建ajv实例
-    const validatorRef:Ref<Ajv> = shallowRef() as any
+    const validatorRef: Ref<Ajv> = shallowRef() as any
     watchEffect(() => {
       validatorRef.value = new Ajv({
         ...defaultAjvOptions,
         ...props.ajvOptions
       })
 
-      // 添加 ajv 我们自定义的format  就是自定义的key，扩展校验
+      // 添加 ajv 我们自定义的format  就是自定义的key，扩展校验,注册到实例上
       if (props.customFormats) {
-        const customFormats = Array.isArray(props.customFormats) ? props.customFormats : [props.customFormats]
-        customFormats.forEach(format => {
+        const customFormats = Array.isArray(props.customFormats)
+          ? props.customFormats
+          : [props.customFormats]
+        customFormats.forEach((format) => {
           // 添加自定义的key 和校验
           validatorRef.value.addFormat(format.name, format.definition)
+        })
+      }
+
+      // 注册我们自定义扩展ajv 的keyword ，macro的方式,注册到实例上
+      if (props.customKeywords) {
+        const customKeywords = Array.isArray(props.customKeywords)
+          ? props.customKeywords
+          : [props.customKeywords]
+        customKeywords.forEach((keyword) => {
+          validatorRef.value.addKeyword(keyword.name, keyword.deinition as any)
         })
       }
     })
@@ -112,18 +174,23 @@ export default defineComponent({
     const validateIndex = ref(0)
 
     // 数据变化重新调用校验方法
-    watch(() => props.value, () => {
-      if (validateResolveRef.value) {
-        doValidate()
+    watch(
+      () => props.value,
+      () => {
+        if (validateResolveRef.value) {
+          doValidate()
+        }
+      },
+      {
+        // 深度监听
+        deep: true
       }
-    }, { // 深度监听
-      deep: true
-    })
+    )
 
     // 返回错误的方法
     async function doValidate () {
       console.log('start validate ----------')
-      const index = validateIndex.value += 1
+      const index = (validateIndex.value += 1)
       const result = await validateFormData(
         validatorRef.value,
         props.value,
@@ -191,19 +258,20 @@ export default defineComponent({
       {
         immediate: true
       }
-
     )
 
     return () => {
       const { schema, value, uiSchema } = props
-      return <SchemaItem
-        schema={schema}
-        rootSchema={schema}
-        value={value}
-        onChange={handleChange}
-        uiSchema={uiSchema || {}}
-        errorSchema={errorSchemaRef.value || {}}
-      />
+      return (
+        <SchemaItem
+          schema={schema}
+          rootSchema={schema}
+          value={value}
+          onChange={handleChange}
+          uiSchema={uiSchema || {}}
+          errorSchema={errorSchemaRef.value || {}}
+        />
+      )
     }
   }
 })

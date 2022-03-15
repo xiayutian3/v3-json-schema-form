@@ -10,6 +10,9 @@ import SchemaForm, { ThemeProvider } from '../lib'
 import themeDefault from '../lib/theme-default/index'
 // 自定义format 组件
 import customFormat from './plugins/customFormat'
+// 自定义 扩展 keyword
+import customKeywords from './plugins/customKeyword'
+// console.log('customKeywords: ', customKeywords)
 
 // TODO: 在lib中export
 type Schema = any
@@ -206,6 +209,7 @@ export default defineComponent({
                   contextRef={contextRef}
                   ref={nameRef}
                   customFormats={customFormat}
+                  customKeywords={customKeywords}
                   customValidate={demo.customValidate}
                 />
               </ThemeProvider>

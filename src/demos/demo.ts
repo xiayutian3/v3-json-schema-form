@@ -60,8 +60,8 @@ export default {
     properties: {
       pass1: {
         type: 'string',
-        minLength: 10,
-        // test: true,
+        // minLength: 10,
+        test: true, // 扩展的自定义keyword
         title: 'password'
       },
       pass2: {
