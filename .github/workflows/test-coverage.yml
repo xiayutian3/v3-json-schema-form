@@ -8,7 +8,7 @@ on: [push]
 jobs:
 # 第一步build
   build:
-  # 在哪些平台执行 环境运行 跑了9个不同环境的命令， matrix矩阵 如ubuntu-latest ：[8.x, 10.x, 12.x] ...
+  # 在哪些平台执行 环境运行 跑了9个不同环境的命令， matrix矩阵 如ubuntu-latest ：[8.x, 10.x, 12.x] ，macOS-latest ：[8.x, 10.x, 12.x]...
     runs-on: ${{matrix.os}} 
 
     # 策略
@@ -22,10 +22,11 @@ jobs:
 
     # 执行这个任务的流程
     steps:
-      # actions/checkout@v2  这个是github已经封装好的命令
+      # actions/checkout@v2  这个是github已经封装好的命令  切代码到 runner
       - uses: actions/checkout@v2
-      # 名字是什么
+      # 名字是什么。 使用 node的什么版本
       - name: Use Node.js ${{matrix.node-version}}
+      # 使用 node的什么版本
         uses: actions/setup-node@v1
         # 传递参数
         with:
@@ -38,3 +39,10 @@ jobs:
           CI: true
 
 
+
+# 相关术语
+
+# runner: github 分配的用来执行 CI/CD 的构建服务器 (也可以自建 runner)
+# workflow: CI/CD 的工作流
+# job: 任务，比如构建，测试和部署。每个 workflow 由多个 job 组成
+# step: 每个 job 由多个 step 组成
