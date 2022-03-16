@@ -9,7 +9,8 @@
     "build:theme": "cross-env TYPE=lib vue-cli-service build --target lib --name theme-default/index --no-clean lib/theme-default/index.tsx",
     "build:all": "rimraf dist && npm run build:core && npm run build:theme",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test:script": "vue-cli-service build"
   },
   "dependencies": {
     "ajv": "^8.9.0",

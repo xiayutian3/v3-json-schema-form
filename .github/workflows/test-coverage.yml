@@ -1,7 +1,7 @@
 # 名字
 name: test-coverage 
 
-# 什么时候触发 webhook原理 差不多
+# 什么时候触发 git pushde的时候 webhook原理 差不多
 on: [push]
 
 # 要执行的任务
@@ -31,7 +31,7 @@ jobs:
           node-version: ${{matrix.node-version}}
       # 执行命令
       - run: npm install
-      - run: npm run test:unit
+      - run: npm run test:script
       # 添加环境变量CI
         env:
           CI: true
