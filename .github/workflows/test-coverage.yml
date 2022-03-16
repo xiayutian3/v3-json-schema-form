@@ -1,0 +1,39 @@
+# 名字
+name: test-coverage 
+
+# 什么时候触发 webhook原理 差不多
+on: [push]
+
+# 要执行的任务
+jobs:
+# 第一步build
+  build:
+  # 在哪些平台执行 环境运行 跑了9个不同环境的命令， matrix矩阵 如ubuntu-latest ：[8.x, 10.x, 12.x] ...
+    runs-on: ${{matrix.os}} 
+
+    # 策略
+    strategy:
+    # 矩阵
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+
+
+    # 执行这个任务的流程
+    steps:
+      # actions/checkout@v2  这个是github已经封装好的命令
+      - uses: actions/checkout@v2
+      # 名字是什么
+      - name: Use Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v1
+        # 传递参数
+        with:
+          node-version: ${{matrix.node-version}}
+      # 执行命令
+      - run: npm install
+      - run: npm run test:unit
+      # 添加环境变量CI
+        env:
+          CI: true
+
+
