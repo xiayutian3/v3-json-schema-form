@@ -1,6 +1,7 @@
 import { mount, shallowMount } from '@vue/test-utils'
 import { defineComponent, h } from 'vue'
 import JsonSchemaForm, { NumberField, StringField } from '../../lib'
+import TestComponent from './utils/TestComponent'
 
 describe('ObjectFiled', () => {
   // 提取公共部分
@@ -21,7 +22,7 @@ describe('ObjectFiled', () => {
 
   // 测试渲染 number string filed
   it('should render properties to correct fields', async () => {
-    const wrapper = mount(JsonSchemaForm, {
+    const wrapper = mount(TestComponent, {
       props: {
         schema: schema,
         value: {},
@@ -40,7 +41,7 @@ describe('ObjectFiled', () => {
   // 测试组件的handleObjectFieldChange函数
   it('should change value when sub fields trigger onChange', async () => {
     let value:any = {}
-    const wrapper = mount(JsonSchemaForm, {
+    const wrapper = mount(TestComponent, {
       props: {
         schema: schema,
         value: value,
@@ -63,7 +64,7 @@ describe('ObjectFiled', () => {
     let value:any = {
       name: '123'
     }
-    const wrapper = mount(JsonSchemaForm, {
+    const wrapper = mount(TestComponent, {
       props: {
         schema: schema,
         value: value,

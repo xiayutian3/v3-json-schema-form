@@ -33,10 +33,25 @@ jobs:
           node-version: ${{matrix.node-version}}
       # 执行命令
       - run: npm install
-      - run: npm run test:script
-      # 添加环境变量CI
+      # 生成单元测试覆盖率的数据
+      - run: npm run test:unit:cov
+      # 添加环境变量 CI
         env:
           CI: true
+
+      # 名称 标题
+      - name: Upload coverage to Codecov
+      # 使用封装好的 codecov action 上传文件 到 https://app.codecov.io/gh
+        uses: codecov/codecov-action@v1
+        # 调用action 传入参数
+        with:
+          # 标识 哪个测试的测试覆盖率数据 - 这里是单元测试
+          flags: unittests
+          # 从哪里去读取测试覆盖率数据
+          file: ./coverage/clover.xml
+          # 如果报错，停止整个ci
+          fail_ci_if_error: true
+
 
 
 
