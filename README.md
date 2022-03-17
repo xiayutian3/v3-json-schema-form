@@ -1,4 +1,5 @@
 # v3-json-schema-form
+![Coverage](https://img.shields.io/codecov/c/gh/xiayutian3/vue3.x-json-schema-form/master)
 
 ## Project setup
 ```
